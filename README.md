@@ -39,14 +39,14 @@ room_id ──► latest_color
 This state is updated dynamically whenever a new light event arrives.
 
 ## Replaceable Components (Kafka / Redis)
-This project is intentionally built around the Dependency Inversion Principle. The core infrastructure can be natively swapped out without changing business logic:
+The core infrastructure can be natively swapped out without changing business logic:
 
 ### 1. Message Transport Layer (Apache Kafka)
 In Production: 
 Cameras and lights publish to designated Kafka topics (frames and lights). The service consumes from both streams asynchronously and forwards outputs to enriched_frames.
 
 In This Implementation: 
-Replaced by safe in-memory asynchronous queues (asyncio.Queue). The architectural contracts are fully preserved via MessageConsumer and MessageProducer abstract types.
+Replaced by safe in-memory asynchronous queues. The architectural contracts are fully preserved via MessageConsumer and MessageProducer abstract types.
 
 ### 2. State Store (Redis Cache)
 In Production: Redis acts as a fast, shared, distributed key-value cache holding state metrics across instances:
@@ -55,7 +55,7 @@ room-1 ──► [0.1, 1.0, 0.5]
 
 room-2 ──► [0.8, 0.2, 0.3]
 
-In This Implementation: Replaced by a fast in-memory dictionary store wrapped behind the ColorStore interface contract.
+In This Implementation: Replaced by a in-memory dictionary store wrapped behind the ColorStore interface contract.
 
 ## Key Design Principles
 * Stateless Processing Layer: The enrichment nodes have no local persistence, meaning they can scale horizontally effortlessly.
